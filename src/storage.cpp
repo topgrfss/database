@@ -1,5 +1,5 @@
-#include <fstream>
 #include "storage.hpp"
+#include <fstream>
 #include <iostream>
 
 void Storage::add(const Item &item)
@@ -11,47 +11,11 @@ void Storage::add(const Item &item)
 	items_[count_++] = item;
 }
 
-void Storage::remove(Item &item)
+void Storage::remove(const Item &item)
 {
 	if (!is_exist(item))
 		return;
 	items_[current_id_] = items_[--count_];
-}
-
-void Storage::save() const
-{
-	char filename[5] = { "file" };
-	std::ofstream file(filename, std::ios::binary);
-
-	if (!file.is_open()) {
-		std::cerr << "Error: Could not open file for writing\n";
-		return;
-	}
-
-	// 1. Сначала записываем количество элементов (метаданные)
-	file.write(reinterpret_cast<const char *>(&count_), sizeof(count_));
-
-	// 2. Затем записываем весь массив "живых" данных целиком
-	file.write(reinterpret_cast<const char *>(items_),
-		   sizeof(Item) * count_);
-
-	file.close();
-}
-
-void Storage::load()
-{
-	char filename[5] = { "file" };
-	std::ifstream file(filename, std::ios::binary);
-	if (!file)
-		return;
-
-	// 1. Читаем, сколько элементов было сохранено
-	file.read(reinterpret_cast<char *>(&count_), sizeof(count_));
-
-	// 2. Читаем данные прямо в массив items_
-	file.read(reinterpret_cast<char *>(items_), sizeof(Item) * count_);
-
-	file.close();
 }
 
 void Storage::get_all() const
@@ -66,6 +30,31 @@ void Storage::get_all() const
 			  << " exp: " << items_[i].exp_date << "\n";
 	}
 	std::cout << "\n";
+}
+
+void Storage::save() const
+{
+	std::ofstream file(path_, std::ios::binary);
+
+	if (!file.is_open()) {
+		return;
+	}
+
+	file.write(reinterpret_cast<const char *>(&count_), sizeof(count_));
+	file.write(reinterpret_cast<const char *>(items_),
+		   sizeof(Item) * count_);
+	file.close();
+}
+
+void Storage::load()
+{
+	std::ifstream file(path_, std::ios::binary);
+	if (!file)
+		return;
+
+	file.read(reinterpret_cast<char *>(&count_), sizeof(count_));
+	file.read(reinterpret_cast<char *>(items_), sizeof(Item) * count_);
+	file.close();
 }
 
 int Storage::get_id(const Item &item)

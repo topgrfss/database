@@ -4,7 +4,7 @@
 class Storage {
     public:
 	void add(const Item &item);
-	void remove(Item &item);
+	void remove(const Item &item);
 	void get_all() const;
 
 	void save() const;
