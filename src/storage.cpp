@@ -1,6 +1,5 @@
 #include <fstream>
 #include "storage.hpp"
-#include <cstddef>
 #include <iostream>
 
 void Storage::add(const Item &item)
@@ -19,7 +18,7 @@ void Storage::remove(Item &item)
 	items_[current_id_] = items_[--count_];
 }
 
-void Storage::write() const
+void Storage::save() const
 {
 	char filename[5] = { "file" };
 	std::ofstream file(filename, std::ios::binary);
@@ -39,7 +38,7 @@ void Storage::write() const
 	file.close();
 }
 
-void Storage::read()
+void Storage::load()
 {
 	char filename[5] = { "file" };
 	std::ifstream file(filename, std::ios::binary);
@@ -57,14 +56,16 @@ void Storage::read()
 
 void Storage::get_all() const
 {
-        if (count_ == 0){
-                std::cout << "null\n";
-                return;
-        }
+	if (count_ == 0) {
+		std::cout << "null\n";
+		return;
+	}
 	for (unsigned int i = 0; i < count_; i++) {
 		std::cout << i + 1 << " name: " << items_[i].name
-			  << " plu: " << items_[i].plu << "\n";
-	}std::cout << "\n";
+			  << " plu: " << items_[i].plu
+			  << " exp: " << items_[i].exp_date << "\n";
+	}
+	std::cout << "\n";
 }
 
 int Storage::get_id(const Item &item)
