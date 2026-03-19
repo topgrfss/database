@@ -25,12 +25,14 @@ int main()
 
 	Storage str;
 
-	str.get_all();
-
-	str.add(item1);
-	str.add(item2);
-	str.add(item3);
-	str.add(item4);
+	// str.add(item1);
+	// str.add(item2);
+	// str.add(item3);
+	// str.add(item4);
 
 	str.get_all();
+
+        str.read();
+	str.get_all();
+
 }
