@@ -57,6 +57,10 @@ void Storage::read()
 
 void Storage::get_all() const
 {
+        if (count_ == 0){
+                std::cout << "null\n";
+                return;
+        }
 	for (unsigned int i = 0; i < count_; i++) {
 		std::cout << i + 1 << " name: " << items_[i].name
 			  << " plu: " << items_[i].plu << "\n";
